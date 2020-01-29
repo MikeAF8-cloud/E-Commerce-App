@@ -1,0 +1,22 @@
+a:hover {
+    background-color: #28a745;
+    color: #fff;
+}
+
+menu-item {
+    margin-left: 2.75em !important;
+}
+
+.badge-icon {
+    z-index: 2;
+    position: absolute;
+    left: 89.4%;
+    top: 33%;
+}
+
+.cart {
+    z-index: 1;
+    position: relative;
+    right: 3%;
+    top: 5%;
+}

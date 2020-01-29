@@ -1,0 +1,150 @@
+<div class="card rounded my-5">
+    <div class="row">
+        <div class="col-xs-10 col-sm-10 col-md-9 col-lg-6 ml-3 mb-2">
+            <form *ngIf="checkoutForm" [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+                <h2 class="d-inline mr-5">Shipping</h2>
+                <input (change)=getUserAddress($event.target.checked) name="check" type="checkbox" class="mr-2"> 
+                <label for="check">
+                    Send to this address
+                </label> 
+    
+                <div formGroupName="address">
+                    <div class="form-group">
+                        <label for="streetAddress">Street Address</label>
+                        <input formControlName="streetAddress" name="streetAddress" type="text" class="form-control" required placeholder="Street Address">
+                        <div *ngIf="streetAddress.invalid && streetAddress.touched">
+                            <small *ngIf="streetAddress.errors?.required" class="text-danger ml-2">
+                                Street address is required
+                            </small>
+                            <small *ngIf="streetAddress.errors?.pattern" class="text-danger">
+                                Invalid street address
+                            </small>
+                        </div>
+                    </div>
+        
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                <label for="city">City</label>
+                                <input formControlName="city" name="city" type="text" class="form-control" required placeholder="City">
+                                <div *ngIf="city.invalid && city.touched">
+                                    <small *ngIf="city.errors?.required" class="text-danger">
+                                        City is required
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="state">State</label>
+                                <select formControlName="state"name="state" id="state" class="form-control">
+                                    <option value="">---Select---</option>
+                                    <option *ngFor="let state of states">{{ state }}</option>
+                                </select>
+                                <div *ngIf="state.invalid && state.touched">
+                                    <small *ngIf="state.errors?.required" class="text-danger">
+                                        State is required
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="zipcode">Zipcode</label>
+                                <input formControlName="zipcode" name="zipcode" type="number" class="form-control" required placeholder="99999">
+                                <div *ngIf="zipcode.invalid && zipcode.touched">
+                                    <small *ngIf="zipcode.errors?.required" class="text-danger">
+                                        Zipcode is required
+                                    </small>
+                                    <small *ngIf="zipcode.errors?.minlength || zipcode.errors?.maxlength" class="text-danger">
+                                        Invalid zipcode
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+                <h2 class="d-inline mr-3">Billing</h2>
+                <select *ngIf="userBillingInfo.length" (change)="getCardInfo($event.target.value)" id="state" class="form-control d-inline mr-3" style="width: 10.5rem" required>
+                    <option value="0">Select saved card</option>
+                    <option *ngFor="let card of userBillingInfo; let i = index;" value="{{ i + 1 }}">****-***-****-{{ card.cardNumber % 10000 }}</option>
+                </select> 
+
+                <span formGroupName="card">
+                    <input formControlName="saveCard" name="saveCard" name="check" type="checkbox" class="mr-1"> Save card info
+                </span>
+                <div formGroupName="card">
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input formControlName="cardNumber" name="cardNumber" type="number" class="form-control" required placeholder="123-456-7890">
+                        <div *ngIf="cardNumber.invalid && cardNumber.touched">
+                            <small *ngIf="cardNumber.errors?.required" class="text-danger ml-2">
+                                Card number is required
+                            </small>
+                            <small *ngIf="cardNumber.errors?.pattern" class="text-danger">
+                                Invalid card number
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cardHolder">Card Holder</label>
+                        <input formControlName="cardHolder" name="cardHolder" type="text" class="form-control" required placeholder="Card Holder Name">
+                        <div *ngIf="cardHolder.invalid && cardHolder.touched">
+                            <small *ngIf="cardHolder.errors?.required" class="text-danger ml-2">
+                                Card holder name is required
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                <label for="expDate">Expiration Date</label>
+                                <input formControlName="expDate" name="expDate" type="text" class="form-control" required placeholder="Expiration Date">
+                                <div *ngIf="expDate.invalid && expDate.touched">
+                                    <small *ngIf="expDate.errors?.required" class="text-danger ml-2">
+                                        Card expiration date is required
+                                    </small>
+                                    <small *ngIf="expDate.errors?.pattern" class="text-danger">
+                                        Invalid expiration date
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="securityCode">Security Code</label>
+                                <input formControlName="securityCode" name="securityCode" type="number" class="form-control" required placeholder="Security Code">
+                                <div *ngIf="securityCode.invalid && securityCode.touched">
+                                    <small *ngIf="securityCode.errors?.required" class="text-danger ml-2">
+                                        Card number is required
+                                    </small>
+                                    <small *ngIf="securityCode.errors?.pattern" class="text-danger">
+                                        Invalid securityCode
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Place Order</button>
+            </form>
+        </div>
+        <div class="col-xs-10 col-sm-10 col-md-9 col-lg-5 mx-auto my-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Order Summary</h4>
+                    <p class="card-text">You have {{ cart.getCartValue() }} items in your shopping cart.</p>
+                    <ul class="list-group list-group-flush">
+                        <li *ngFor="let prod of products" class="list-group-item">
+                            {{ prod.quantity }} x {{ prod.title }}
+                            <div class="float-right">
+                            {{ prod.price * prod.quantity | currency:'USD':true }}
+                            </div>
+                        </li>
+                        <li class="list-group-item font-weight-bold text-right">
+                            Total: {{ getTotalPrice() | currency: 'USD': true}}
+                        </li>
+                    </ul>
+                </div>
+                </div>
+        </div>
+    </div>
+</div>

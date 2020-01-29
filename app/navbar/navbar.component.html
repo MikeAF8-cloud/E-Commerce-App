@@ -1,0 +1,57 @@
+<nav class="navbar navbar-expand-lg fixed-top bg-success">
+  <img routerLink="/" class="navbar-brand mr-5" src="../../assets/images/ferrari_fresh_logo.png" />
+  <button class="navbar-toggler"><span class="navbar-toggler-icon"></span></button>
+  
+  <div class="collapse navbar-collapse ml-5 w-100">
+      <div class="navbar-nav flex-row ml-4 w-50">
+          <input class="form-control mr-2" type="text" placeholder="Search" aria-label="Search">
+          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+      </div>
+  
+      <ul class="navbar-nav ml-auto">
+
+        <li *ngIf="user.getUser() as _user" ngbDropdown class="nav-item dropdown">
+          <div >
+              <button ngbDropdownToggle type="button" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-light mr-2">
+                  <fa-icon [icon]="faUser" class="mr-2"></fa-icon>
+                  Welcome {{ _user }}
+              </button>
+
+              <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdown01">
+                <a class="dropdown-item" routerLink="/my-orders">My Orders</a>
+                <a *ngIf="user.getAuth() === 'ADMIN'" class="dropdown-item" routerLink="/admin/orders">Manage Orders</a>
+                <a *ngIf="user.getAuth() === 'ADMIN'" class="dropdown-item" routerLink="/admin/products">Manage Products</a>
+                <a class="dropdown-item" routerLink="/login" (click)="user.logout()">Logout</a>
+              </div>
+          </div>
+        </li>
+
+        <li *ngIf="!user.getUser()" ngbDropdown class="nav-item dropdown">
+          <div>
+            <button ngbDropdownToggle type="button" href="#" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-outline-light mr-2">
+              <fa-icon [icon]="faUser"></fa-icon>
+              Sign in
+            </button>
+            <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdown02">
+              <a routerLink="/login" class="dropdown-item">Sign In</a>
+              <a routerLink="/signup" class="dropdown-item">Sign Up</a>
+            </div>
+          </div>
+        </li>
+        <!-- <li class="nav-item">
+          <button type="button" routerLink="/login" class="btn btn-outline-light mr-2">Login</button>
+        </li> -->
+        <li *ngIf="user.getUser();" class="nav-item">
+            <button type="button" (shoppingCart)="changeQuantity($event)" routerLink="/shopping-cart" class="btn btn-outline-light mr-2">
+              <span *ngIf="cart.getCartValue() as _cart" class="badge badge-warning badge-pill badge-icon">
+                {{ _cart }}
+              </span> 
+              <fa-icon [icon]="faCart" class="mr-2 fa-lg" [class.cart]="cart.getCartValue() !== 0" >
+              </fa-icon>
+              Shopping Cart
+            </button>
+        </li>
+
+      </ul>
+  </div>
+</nav>

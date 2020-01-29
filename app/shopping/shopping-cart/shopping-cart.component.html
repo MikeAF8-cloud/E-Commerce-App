@@ -1,0 +1,53 @@
+<h1 class="mt-5">Shopping Cart</h1>
+<div *ngIf="cart.getCartValue(); else elseBlock">
+    <span class="form-inline">
+        <p>You have {{ cart.getCartValue() }} items in your shopping cart!</p>
+        <button (click)="deleteCart()" class="btn btn-light ml-5 mb-3">Delete Shopping Cart</button>
+    </span>
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 20%"></th>
+                <th style="width: 20%">Title</th>
+                <th style="width: 30%">Quantity</th>
+                <th style="width: 15%">Price</th>
+                <th style="width: 15%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let prod of products; let i = index">
+                <td>
+                    <img *ngIf="prod.imageUrl" [src]="prod.imageUrl" 
+                    alt="{{ prod.title }} Image" width="100" height="100"
+                    class="thumbnail alig-center">
+                </td>
+                <td class="align-middle">{{ prod.title }}</td>
+                <td class="align-middle">
+                    <button [disabled]="prod.quantity === 1" class="btn btn-secondary" (click)="changeQuantity(prod.id, -1, i)" type="button">-</button>
+                    <button [disabled]="true" class="btn" style="width: 6.5rem; background: #ccc !important;" type="button">{{ prod.quantity }}</button>
+                    <button class="btn btn-secondary" (click)="changeQuantity(prod.id, 1, i)" type="button">+</button>
+                </td>
+                <td class="align-middle">{{ prod.price * prod.quantity | currency: 'USD': true}}</td>
+                <td class="align-middle">
+                    <button (click)="deleteFromCart(prod.id, prod.title, prod.quantity)" class="btn btn-danger">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                    
+                </td>
+                <td></td>
+                <td class="text-right">Total:</td>
+                <td> {{ totalPrice() | currency: 'USD': true}}</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    <a routerLink="/check-out" class="btn btn-primary ml-3 mb-5">Check Out</a>
+</div>
+
+<ng-template #elseBlock>
+    <p>Your shopping cart is empty!</p>
+</ng-template>

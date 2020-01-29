@@ -1,0 +1,36 @@
+<div class="alert alert-success mt-5">
+    <h1>Your order has been placed</h1>
+    <div *ngIf="order" class="text-left ml-3">
+        <h3>Order ID: {{ order.orderID }}</h3>
+        <hr />
+        <div class="row">
+            <div class="col-xs-10 col-sm-10 col-md-9 col-lg-4 ml-4 mb-2 my-auto text-center">
+                <div class="ml-3 mt-2">
+                    <h5>Name: {{ order.name }}</h5>
+                    <p>Ordered on: {{ order.date | date }}</p>
+                    <p>Delivered to 
+                        {{ order.address.streetAddress }}, 
+                        {{ order.address.city }}, 
+                        {{ order.address.state }}
+                        {{ order.address.zipcode }}
+                    </p>
+                </div>
+            </div>
+            <div class="col-xs-10 col-sm-10 col-md-9 col-lg-5 mx-auto">
+                <ul class="list-group list-group-flush">
+                    <li *ngFor="let prod of order.products" class="">
+                        {{ prod.quantity }} x {{ prod.title }}
+                        <div class="text-right">
+                        {{ prod.price * prod.quantity | currency:'USD':true }}
+                        </div>
+                    </li>
+                    <hr />
+                    <li class="font-weight-bold text-right">
+                        Total: {{ getTotalPrice() | currency: 'USD': true}}
+                    </li>
+                </ul>                        
+            </div>
+        </div>
+    </div>
+</div>
+<a href="" class="ml-2 mt-2 btn btn-success"><- Return To Home Page</a>

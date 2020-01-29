@@ -1,0 +1,41 @@
+<div class="modal">
+    <div class="container-fluid outer-container rounded text-center">
+        <img src="../../assets/images/ferrari_fresh_logo.png">
+        <span id="closeBtn" (click)="closeModal()" class="close-btn">&times;</span>
+        <div class="card rounded card-dim text-left">
+            <h3>Order ID: {{ order.orderID }}</h3>
+            <hr />
+            <div class="row">
+                <div class="col-xs-10 col-sm-10 col-md-9 col-lg-4 ml-4 mb-2 my-auto text-center">
+                    <div class="ml-3 mt-2">
+                        <h5 *ngIf="order.name">Name: {{ order.name }}</h5>
+                        <p>Ordered on: {{ order.date | date }}</p>
+                        <p>Delivered to 
+                            {{ order.address.streetAddress }}, 
+                            {{ order.address.city }}, 
+                            {{ order.address.state }}
+                            {{ order.address.zipcode }}
+                        </p>
+                    </div>
+                </div>
+                <div class="col-xs-10 col-sm-10 col-md-9 col-lg-6 mx-auto">
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li *ngFor="let prod of order.products" class="list-group-item">
+                                    {{ prod.quantity }} x {{ prod.title }}
+                                    <div class="text-right">
+                                    {{ prod.price * prod.quantity | currency:'USD':true }}
+                                    </div>
+                                </li>
+                                <li class="list-group-item font-weight-bold text-right">
+                                    Total: {{ getTotalPrice() | currency: 'USD': true}}
+                                </li>
+                            </ul>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="card rounded mb-2" style="width: 17rem; background-color: #e4e4e4">
+    <img class="card-img-top" *ngIf="product.imageUrl" [src]="product.imageUrl" alt="{{ product.title }}" width="920" height="200">
+    <div class="card-body">
+        <h5 class="card-title">{{ product.title }}</h5>
+        <span class="card-text">
+            <p *ngIf="product.quantity" class="text-info" style="display: inline">{{ product.quantity }} in cart</p>
+            <p style="float: right;">Price: {{ product.price  | currency: 'USD': true}}</p>
+        </span>
+    </div>
+    <div class="card-footer">
+        <a *ngIf="showButton" href="#" (click)="showModal=true" class="btn btn-primary btn-block">Add to Cart</a>
+    </div>
+</div>
+
+<div *ngIf="showModal">
+    <app-product-modal [product]="product" (prodAmount)="increaseQuantity($event)" (toggleModal)="closeModal($event)"></app-product-modal>
+</div>

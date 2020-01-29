@@ -1,0 +1,128 @@
+<h2 class="text-center mt-3">Products</h2>
+<p>
+    <button routerLink="/admin/products/new" 
+    class="btn btn-primary mt-2">
+        New Product
+    </button>
+</p>
+<p>
+    <input 
+    #query
+    (keyup)="pageCounter = getMaxPages(query.value)" 
+    type="text" class="form-control" 
+    placeholder="Search...">
+</p>
+
+<table class="bold-font table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th (click)="sortProducts('id')" style="width: 10%">
+                <ng-container *ngIf="sortCategory === 'id'">
+                    <fa-icon *ngIf="idClick" [icon]="angleDown"></fa-icon>
+                    <fa-icon *ngIf="!idClick" [icon]="angleUp"></fa-icon>
+                </ng-container>
+            </th>
+            <th (click)="sortProducts('title')" style="width: 45%">
+                Title
+                <ng-container *ngIf="sortCategory === 'title'">
+                    <fa-icon *ngIf="titleClick" [icon]="angleDown"></fa-icon>
+                    <fa-icon *ngIf="!titleClick" [icon]="angleUp"></fa-icon>
+                </ng-container>
+            </th>
+            <th (click)="sortProducts('price')" style="width: 30%">
+                Price
+                <ng-container *ngIf="sortCategory === 'price'">
+                    <fa-icon *ngIf="priceClick" [icon]="angleDown"></fa-icon>
+                    <fa-icon *ngIf="!priceClick" [icon]="angleUp"></fa-icon>
+                </ng-container>
+            </th>
+            <th style="width: 15%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let product of filterList(query.value) | slice:(pageCounter - 1)*itemLimit:pageCounter*itemLimit; let i = index">
+            <tr>
+                <td>{{ (pageCounter - 1) * (itemLimit % products.length) + (i + 1) }}</td>
+                <td>{{ product.title }}</td>
+                <td>{{ product.price | currency: 'USD': true }}</td>
+                <td>
+                    <a [routerLink]="['/admin/products', product.id]">Edit</a>
+                </td>
+            </tr>   
+        </ng-container>
+    </tbody>
+    <tfoot>
+    
+    </tfoot>
+</table>
+<div class="bold-font container form-inline">
+    
+    Results {{ (pageCounter - 1)  * itemLimit + 1 }} - {{ listEnd(query.value) ? pageCounter * itemLimit : filterList(query.value).length }} / {{ filterList(query.value).length }} 
+    
+    <div class="ml-auto">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text bold-font text-center" style="width: 4rem">Limit:</span>
+            </div>
+            <input [value]="itemLimit" (input)="newItemLimit($event.target.value ? $event.target.value : 1, query.value)" type="number" 
+                min="1" max="{{ filterList(query.value).length }}"
+                class="form-control bold-font mr-5 text-center border-round-right" style="width: 5rem" 
+                placeholder="{{ pageCounter*10 }}">
+
+            <button [disabled]="pageCounter === 1" type="button" style="width: 2.7rem" class="input-group-text ml-5 mr-1 text-center" (click)="pageBegin()">
+                <fa-icon [icon]="angleDoubleLeft"></fa-icon>
+            </button>
+            <button [disabled]="pageCounter === 1" type="button" style="width: 2.3rem" class="input-group-text mr-1 text-center" (click)="pageChangeOne(-1)">
+                <fa-icon [icon]="angleLeft"></fa-icon>    
+            </button>
+
+            <input type="text" 
+                class="form-control bold-font text-center border-round-left" style="width: 4rem !important"
+                placeholder="{{ pageCounter }}">
+            <span class="input-group-append float-right mr-1">
+                <span class="input-group-text bold-font">/ {{ getMaxPages(query.value) }}</span>
+            </span>
+
+            <button [disabled]="!listEnd(query.value)" type="button" style="width: 2.3rem" class="input-group-text mr-1 text-center" (click)="pageChangeOne(1)">
+                <fa-icon [icon]="angleRight"></fa-icon>
+            </button>
+            <button [disabled]="!listEnd(query.value)" type="button" style="width: 2.7rem" class="input-group-text mr-1 text-center" (click)="pageEnd(query.value)">
+                <fa-icon [icon]="angleDoubleRight"></fa-icon>
+            </button>
+        </div>
+    </div>
+</div>
+
+        <!-- 
+<div class="row">
+    <div class="col-3">
+        Results {{ pageCounter * 10 + 1 }} - {{ products.length > pageCounter*10+10 ? pageCounter*10+10 : products.length }} / {{ products.length }} 
+    </div>
+    <div class="ml-auto">
+
+        <span class="input-group-prepend">
+            <span class="input-group-text">Limit:</span>
+        </span>
+        <input type="text" 
+        class="input-group-text" style="width: 10% !important; text-align: center" 
+        placeholder="{{pageCounter*10 + 10}}">
+        
+        <button type="button" style="width: 7%; text-align: center" class="input-group-text mr-1" (click)="pageChange(1)"><<</button>
+        <button type="button" style="width: 6%; text-align: center" class="input-group-text mr-1" (click)="pageChange(-1)"><</button>
+
+
+        <input type="text" 
+            class="form-control" style="width: 10% !important; text-align: center" 
+            aria-label="Amount (to the nearest dollar)" 
+            placeholder="{{ pageCounter + 1 }}"
+        >
+        <span class="input-group-prepend float-right mr-1">
+            <span class="input-group-text">/ {{ pageCounter + 1 }}</span>
+        </span>
+
+        <button type="button" style="width: 6%; text-align: center" class="input-group-text mr-1" (click)="pageChange(1)">></button>
+        <button type="button" style="width: 7%; text-align: center" class="input-group-text mr-1" (click)="pageChange(-1)">>></button>
+    </div> 
+</div>
+-->
+

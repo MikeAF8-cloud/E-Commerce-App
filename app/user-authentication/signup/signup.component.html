@@ -1,0 +1,232 @@
+<div class="container-fluid outer-container rounded text-center w-50">
+        <img src="../../assets/images/ferrari_fresh_logo.png">
+        <div class="card rounded">
+            <div class="row">
+                <div class="col-sm-10 col-md col-lg-9 mx-auto card-signin">
+                    <div class="card-body">
+                    <h5 class="card-title text-center">Sign Up</h5>
+                    <hr class="mb-3">
+                    <form [formGroup]="signupForm" class="form-signin" (ngSubmit)="onSubmit()">
+                        <div formGroupName='name'>
+                            <div class="form-label-group mb-3">
+                                <label for="firstname">First name</label>
+                                <input formControlName="firstname" type="text" id="firstname" class="form-control" 
+                                placeholder="John" required>
+                                <div *ngIf="firstname.invalid && firstname.touched">
+                                    <small *ngIf="firstname.errors?.required" class="text-danger">
+                                        First name is required
+                                    </small>
+                                </div>
+                                <div *ngIf="firstname.untouched && this.errors?.firstname">
+                                    <small class="text-danger">
+                                        {{ this.errors.firstname }}
+                                    </small>
+                                </div>
+                            </div>
+    
+                            <div class="form-label-group mb-3">
+                                <label for="lastname">Last name</label>
+                                <input formControlName="lastname" type="text" id="lastname" class="form-control" 
+                                placeholder="Doe" required>
+                                <div *ngIf="lastname.invalid && lastname.touched">
+                                    <small *ngIf="lastname.errors?.required" class="text-danger">
+                                        Last name is required
+                                    </small>
+                                </div>
+                                <div *ngIf="lastname.untouched && this.errors?.lastname">
+                                    <small class="text-danger">
+                                        {{ this.errors.lastname }}
+                                    </small>
+                                </div>
+                            </div>   
+                        </div>
+
+                        <div class="form-label-group mb-3">
+                            <label for="dob">Date of Birth</label>
+                            <input formControlName="dob" type="text" id="dob" class="form-control" 
+                            placeholder="e.g. mm/dd/yyyy" required>
+                            <div *ngIf="dob.invalid && dob.touched">
+                                <small *ngIf="dob.errors?.required" class="text-danger">
+                                    Date of birth is required
+                                </small>
+                                <small *ngIf="dob.errors?.pattern" class="text-danger">
+                                    Invalid date format
+                                </small>
+                                <small *ngIf="!dob.errors?.required && !dob.errors?.pattern && dob.errors?.invalid" class="text-danger">
+                                    Date does not exist
+                                </small>
+                            </div>
+                            <div *ngIf="dob.untouched && this.errors?.dob">
+                                <small class="text-danger">
+                                    {{ this.errors.dob }}
+                                </small>
+                            </div>
+                        </div>
+
+                        <div formGroupName="address">
+                            <div class="form-label-group mb-3">
+                                <label for="streetAddress">Street address</label>
+                                <input formControlName="streetAddress" type="text" id="streetAddress" class="form-control" 
+                                placeholder="123 Main St." required>
+                                <div *ngIf="streetAddress.invalid && streetAddress.touched">
+                                    <small *ngIf="streetAddress.errors?.required" class="text-danger">
+                                        Street address is required
+                                    </small>
+                                    <small *ngIf="streetAddress.errors?.pattern" class="text-danger">
+                                        Invalid street address
+                                    </small>
+                                </div>
+                                <div *ngIf="streetAddress.untouched && this.errors?.streetAddress">
+                                    <small class="text-danger">
+                                        {{ this.errors.streetAddress }}
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="form-label-group mb-3">
+                                <label for="city">City</label>
+                                <input formControlName="city" type="text" id="city" class="form-control" 
+                                placeholder="New York City" required>
+                                <div *ngIf="city.invalid && city.touched">
+                                    <small *ngIf="city.errors?.required" class="text-danger">
+                                        City is required
+                                    </small>
+                                </div>
+                                <div *ngIf="city.untouched && this.errors?.city">
+                                    <small class="text-danger">
+                                        {{ this.errors.city }}
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="form-label-group mb-3">
+                                <label for="state">State</label>
+                                <select formControlName="state" id="state" class="form-control" required>
+                                    <option value="">---Select---</option>
+                                    <option *ngFor="let state of states">{{ state }}</option>
+                                </select> 
+                                <div *ngIf="state.invalid && state.touched">
+                                    <small *ngIf="state.value === ''" class="text-danger">
+                                        Please select a state
+                                    </small>
+                                </div>
+                                <div *ngIf="state.untouched && this.errors?.state">
+                                    <small class="text-danger">
+                                        {{ this.errors.state }}
+                                    </small>
+                                </div>
+                            </div> 
+
+                            <div class="form-label-group mb-3">
+                                <label for="zipcode">Zipcode</label>
+                                <input formControlName="zipcode" type="text" id="zipcode" class="form-control" 
+                                placeholder="99999" required (keypress)="isNumber($event)">
+                                <div *ngIf="zipcode.invalid && zipcode.touched">
+                                    <small *ngIf="zipcode.errors?.required" class="text-danger">
+                                        Zipcode is required
+                                    </small>
+                                    <small *ngIf="zipcode.errors?.minlength || zipcode.errors?.maxlength" class="text-danger">
+                                        Invalid zipcode
+                                    </small>
+                                </div>
+                                <div *ngIf="zipcode.untouched && this.errors?.zipcode">
+                                    <small class="text-danger">
+                                        {{ this.errors.zipcode }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div formGroupName="accountInfo">
+                            <div formGroupName="emailInput">
+                                <div class="form-label-group mb-3">
+                                    <label for="email">Email address</label>
+                                    <input formControlName="email" type="email" id="email" class="form-control" 
+                                    placeholder="test@example.com" required>
+                                    <div *ngIf="email.invalid && email.touched">
+                                        <small *ngIf="email.errors?.required" class="text-danger">
+                                            Email address is required
+                                        </small>
+                                        <small *ngIf="email.errors?.pattern" class="text-danger">
+                                            Invalid email address
+                                        </small>
+                                    </div>
+                                    <div *ngIf="email.untouched && this.errors?.email">
+                                        <small class="text-danger">
+                                            {{ this.errors.email }}
+                                        </small>
+                                    </div>
+                                </div>
+        
+                                <div class="form-label-group mb-3">
+                                    <label for="confirmEmail">Confirm email address</label>
+                                    <input formControlName="confirmEmail" type="email" id="confirmEmail" class="form-control" 
+                                    placeholder="test@example.com" required>
+                                    {{ emailInput.errors }}
+                                    <div *ngIf="confirmEmail.invalid && confirmEmail.touched">
+                                        <small *ngIf="confirmEmail.errors?.required" class="text-danger">
+                                            Field is required
+                                        </small>
+                                        <small *ngIf="confirmEmail.errors?.notSame" class="text-danger">
+                                            Email addresses do not match up
+                                        </small>
+                                    </div>
+                                    <div *ngIf="confirmEmail.untouched && this.errors?.confirmEmail">
+                                        <small class="text-danger">
+                                            {{ this.errors.confirmEmail }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div formGroupName="passwordInput">
+                                <div class="form-label-group mb-3">
+                                    <label for="password">Password</label>
+                                    <input formControlName="password" type="password" id="password" class="form-control" placeholder="Password" required>
+                                    <div *ngIf="password.invalid && password.touched">
+                                        <small *ngIf="password.errors?.required" class="text-danger">Password is required</small>
+                                        <small *ngIf="password.errors?.minlength" class="text-danger">Password must have at least 7 characters</small>
+                                        <small *ngIf="!password.errors?.minlength && password.errors?.pattern" class="text-danger">Password must contain 1 uppercase letter, 1 number, and 1 special character</small>
+                                    </div>
+                                    <div *ngIf="password.untouched && this.errors?.password">
+                                        <small class="text-danger">
+                                            {{ this.errors.password }}
+                                        </small>
+                                    </div>
+                                </div>
+        
+                                <div class="form-label-group mb-3">
+                                    <label for="confirmPassword">Confirm password</label>
+                                    <input formControlName="confirmPassword" type="password" id="confirmPassword" class="form-control" placeholder="Password" required>
+                                    <div *ngIf="confirmPassword.invalid && confirmPassword.touched">
+                                        <small *ngIf="confirmPassword.errors?.required" class="text-danger">Field is required</small>
+                                        <small *ngIf="confirmPassword.errors?.notSame" class="text-danger">Passwords do not match up</small>
+                                    </div>
+                                    <div *ngIf="confirmEmail.untouched && this.errors?.confirmEmail">
+                                        <small class="text-danger">
+                                            {{ this.errors.confirmEmail }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <button class="btn btn-lg btn-primary bg-success text-uppercase mt-4" type="submit" [disabled]="!signupForm.valid">Sign up</button>
+                        <div>
+                            <small>Already have an account? <a routerLink="/signup">Sign in here!</a></small>
+                        </div>
+                        <hr class="my-3">
+                        <button 
+                            class="btn border btn-social-icon btn-lg btn-google text-uppercase googleBtn" 
+                            type="submit"
+                            (click)="user.signIn()">
+                            <fa-icon [icon]="faGoogle"></fa-icon> 
+                            Sign up with Google
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
